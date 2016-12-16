@@ -13,6 +13,6 @@ public class MainOpMode extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        robot.init(hardwareMap, gamepad1);
+        robot.init(hardwareMap);
     }
 }

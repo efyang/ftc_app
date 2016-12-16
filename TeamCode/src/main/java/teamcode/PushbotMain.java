@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 
 public class PushbotMain {
@@ -18,7 +17,6 @@ public class PushbotMain {
     public DcMotor screwMotor;
     public DcMotor rightShooterMotor;
     public DcMotor leftShooterMotor;
-    public Gamepad gamepad;
     public boolean a;
     public boolean b;
     public boolean dpad_down;
@@ -46,7 +44,7 @@ public class PushbotMain {
 
     //runs on press of the "init" button. Maps engines from the robot to variables,
     // and creates a tick before the first with default values
-    public void init(HardwareMap HwMap, Gamepad gamepad) {
+    public void init(HardwareMap HwMap) {
         HardwareMap HM = HwMap;
         rightFrontMotor = HM.dcMotor.get("R1");
         rightBackMotor = HM.dcMotor.get("R2");
@@ -55,7 +53,6 @@ public class PushbotMain {
         screwMotor = HM.dcMotor.get("Arc");
         rightShooterMotor = HM.dcMotor.get("SR");
         leftShooterMotor = HM.dcMotor.get("SL");
-        this.gamepad = gamepad;
         prev_a = false;
         prev_b = false;
         prev_dpad_down = false;
@@ -84,14 +81,23 @@ public class PushbotMain {
     //a function that returns a modified value, checking if it falls within logical boundaries first
     public float incr(float value, float incr, String sign) {
         if (sign.equals("+")) {
-            if (value+incr <= 1.0) {
-                return value+incr;
+            if (value + incr <= 1.0) {
+                return value + incr;
             }
         } else if (sign.equals('-')) {
             if (value - incr >= 0.0) {
-                return value-incr;
+                return value - incr;
             }
         }
         return value;
+    }
+
+    // startup shooter motors - they should remain spinning while the robot is running
+    public void startShooters() {
+
+    }
+
+    public void move(MovementCommand command) {
+
     }
 }
