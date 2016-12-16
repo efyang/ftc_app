@@ -1,4 +1,5 @@
 package teamcode;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -45,7 +46,7 @@ public class PushbotMain {
 
     //runs on press of the "init" button. Maps engines from the robot to variables,
     // and creates a tick before the first with default values
-    public void init(HardwareMap HwMap) {
+    public void init(HardwareMap HwMap, Gamepad gamepad) {
         HardwareMap HM = HwMap;
         rightFrontMotor = HM.dcMotor.get("R1");
         rightBackMotor = HM.dcMotor.get("R2");
@@ -54,7 +55,7 @@ public class PushbotMain {
         screwMotor = HM.dcMotor.get("Arc");
         rightShooterMotor = HM.dcMotor.get("SR");
         leftShooterMotor = HM.dcMotor.get("SL");
-        gamepad = gamepad1;
+        this.gamepad = gamepad;
         prev_a = false;
         prev_b = false;
         prev_dpad_down = false;
@@ -65,9 +66,6 @@ public class PushbotMain {
         prev_left_stick_y = (float) 0.0;
         prev_right_stick_x = (float) 0.0;
         prev_right_stick_y = (float) 0.0;
-
-
-
     }
 
     //functions that detect a change in gamepad state by comparing the value of the specified value in the two most recent ticks
