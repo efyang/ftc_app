@@ -97,7 +97,13 @@ public class PushbotMain {
 
     }
 
-    public void move(MovementCommand command) {
+    // pivot by `degrees` degrees
+    private void pivot(float degrees) {
+
+    }
+
+    // move forward/backword by `meters` meters
+    private void move(float meters) {
 
     }
 }
