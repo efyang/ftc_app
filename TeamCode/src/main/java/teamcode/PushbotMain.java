@@ -65,19 +65,6 @@ public class PushbotMain {
         prev_right_stick_y = (float) 0.0;
     }
 
-    //functions that detect a change in gamepad state by comparing the value of the specified value in the two most recent ticks
-    public boolean valueChanged(float prev, float curr) {
-        if (prev == curr) {
-            return false;
-        }
-        return true;
-    }
-    public boolean valueChanged(boolean prev, boolean curr) {
-        if (prev == curr) {
-            return false;
-        }
-        return true;
-    }
     //a function that returns a modified value, checking if it falls within logical boundaries first
     public float incr(float value, float incr, String sign) {
         if (sign.equals("+")) {

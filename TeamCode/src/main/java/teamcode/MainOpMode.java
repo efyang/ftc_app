@@ -14,5 +14,14 @@ public class MainOpMode extends LinearOpMode {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
+        // say hello
+        telemetry.addData("say", "Hello Driver");
+        telemetry.update();
+
+        waitForStart();
+
+        while (opModeIsActive()) {
+
+        }
     }
 }
