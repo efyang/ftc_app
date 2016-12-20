@@ -33,4 +33,9 @@ public class DualMotorGroup {
         mot2.setMode(mode);
         mot1.setMode(mode);
     }
+
+    public void setPower(double power) {
+        mot2.setPower(power);
+        mot1.setPower(power);
+    }
 }
