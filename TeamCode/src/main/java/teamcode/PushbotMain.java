@@ -26,9 +26,9 @@ public class PushbotMain {
     public boolean dpad_right;
     public boolean dpad_left;
     public float left_stick_x;
-    public static float left_stick_y;
+    public static float left_stick_y = (float) 0.0;
     public float right_stick_x;
-    public static float right_stick_y;
+    public static float right_stick_y = (float) 0.0;
     /*public boolean prev_a;
     public boolean prev_b;
     public boolean prev_dpad_down;
@@ -53,8 +53,8 @@ public class PushbotMain {
         leftFrontMotor = HM.dcMotor.get("L1");
         leftBackMotor = HM.dcMotor.get("L2");
         screwMotor = HM.dcMotor.get("Arc");
-        rightShooterMotor = HM.dcMotor.get("SR");
-        leftShooterMotor = HM.dcMotor.get("SL");
+        //rightShooterMotor = HM.dcMotor.get("SR");
+        //leftShooterMotor = HM.dcMotor.get("SL");
         /*prev_a = false;
         prev_b = false;
         prev_dpad_down = false;
@@ -92,7 +92,7 @@ public class PushbotMain {
     }
 
     // move forward/backword by `meters` meters
-    private void move(float meters) {
+    private void move(double meters) {
 
     }
 }
