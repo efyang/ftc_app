@@ -38,4 +38,8 @@ public class DualMotorGroup {
         mot2.setPower(power);
         mot1.setPower(power);
     }
+    public void setDirection(DcMotor.Direction dir) {
+        mot2.setDirection(dir);
+        mot1.setDirection(dir);
+    }
 }
