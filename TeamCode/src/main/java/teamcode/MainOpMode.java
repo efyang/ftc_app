@@ -3,6 +3,7 @@ package teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 /**
  * Created by efyang on 12/16/16.
  */
@@ -28,31 +29,28 @@ public class MainOpMode extends LinearOpMode {
     public static final double shooterIncr = 0.01;
     public static final double engineIncr = 0.02;
 
-
-
-
-    DualMotorGroup rightMotors = new DualMotorGroup(rightFrontMotor, rightBackMotor);
-    DualMotorGroup leftMotors = new DualMotorGroup(leftFrontMotor, leftBackMotor);
-    leftMotors.setDirection(Direction.REVERSE);
-
-
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
         // say hello
         telemetry.addData("say", "Hey kid.");
         telemetry.update();
-        double lx;
-        double ly;
-        double rx;
-        double ry;
+        double leftx;
+        double righty;
+        double rightx;
+        double lefty;
         waitForStart();
 
+        DualMotorGroup rightMotors = new DualMotorGroup(rightFrontMotor, rightBackMotor);
+        DualMotorGroup leftMotors = new DualMotorGroup(leftFrontMotor, leftBackMotor);
+        leftMotors.setDirection(DcMotor.Direction.REVERSE);
+
+        runOpMode();
         while (opModeIsActive()) {
-            lx = (double) gamepad1.left_stick_x;
-            ly = (double) gamepad1.left_stick_y;
-            ry = (double) gamepad1.right_stick_y;
-            rx = (double) gamepad1.right_stick_x;
+            leftx = (double) gamepad1.left_stick_x;
+            lefty = (double) gamepad1.left_stick_y;
+            righty = (double) gamepad1.right_stick_y;
+            rightx = (double) gamepad1.right_stick_x;
             if (prev_dpad_up != gamepad1.dpad_up && gamepad1.dpad_up) {
                 shooterPower = incr(shooterPower, shooterIncr, "+");
             }
@@ -66,20 +64,23 @@ public class MainOpMode extends LinearOpMode {
                 enginePower = incr(enginePower, engineIncr, "+");
             }
 
+           // updateShooters();
+
             //if the user is clearly trying to turn, not go forward precisely...
-            if (Math.abs(lx) > Math.abs(ly)) {
-                //it does not matter which direction they are turning, as the lx value will be opposite in opposite directions
-                leftMotors.setPower(lx);
-                rightMotors.setPower(-lx);
+            if (Math.abs(leftx) > Math.abs(righty)) {
+                //it does not matter which direction they are turning, as the leftx value will be opposite in opposite directions
+                leftMotors.setPower(-leftx * enginePower);
+                rightMotors.setPower(leftx * enginePower);
             } else {
-                rightMotors.setPower(ly);
-                leftMotors.setPower(ly);
+                rightMotors.setPower(lefty * enginePower);
+                leftMotors.setPower(lefty * enginePower);
             }
+            telemetry.clear();
             telemetry.addData("say", "R vertical: " + gamepad1.right_stick_y);
             telemetry.addData("say", "L vertical: " + gamepad1.left_stick_y);
             telemetry.addData("say", "R horizontal: " + gamepad1.right_stick_x);
             telemetry.addData("say", "L horizontal: " + gamepad1.left_stick_x);
-
+            telemetry.update();
             setValues(); //sets prev values to distinguish button presses tick-to-tick, preventing one press being
                          //detected as 100 presses
         }
@@ -108,7 +109,8 @@ public class MainOpMode extends LinearOpMode {
 
     // startup shooter motors - they should remain spinning while the robot is running
     public void updateShooters() {
-
+     //   rightShooterMotor.setPower(shooterPower);
+     //   leftShooterMotor.setPower(shooterPower);
     }
 
     // pivot by `degrees` degrees
