@@ -29,24 +29,30 @@ public class MainOpMode extends LinearOpMode {
     public static final double shooterIncr = 0.01;
     public static final double engineIncr = 0.02;
 
+
     @Override
+
     public void runOpMode() {
         robot.init(hardwareMap);
         // say hello
         telemetry.addData("say", "Hey kid.");
         telemetry.update();
-        double leftx;
-        double righty;
-        double rightx;
-        double lefty;
-        waitForStart();
+        double leftx = 0.0;
+        double righty = 0.0;
+        double rightx = 0.0;
+        double lefty = 0.0;
+
 
         DualMotorGroup rightMotors = new DualMotorGroup(rightFrontMotor, rightBackMotor);
         DualMotorGroup leftMotors = new DualMotorGroup(leftFrontMotor, leftBackMotor);
         leftMotors.setDirection(DcMotor.Direction.REVERSE);
 
-        runOpMode();
+        telemetry.addData("say", "before opmode");
+        telemetry.update();
+        waitForStart();
         while (opModeIsActive()) {
+            telemetry.addData("say", "opmode reached");
+            telemetry.update();
             leftx = (double) gamepad1.left_stick_x;
             lefty = (double) gamepad1.left_stick_y;
             righty = (double) gamepad1.right_stick_y;
