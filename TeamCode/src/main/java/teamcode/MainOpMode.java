@@ -29,6 +29,9 @@ public class MainOpMode extends LinearOpMode {
     public static final double shooterIncr = 0.03;
     public static final double engineIncr = 0.09;
     public static boolean isSpinning = false;
+    public static double angle = 0.0;
+    public static double angleDegrees;
+    public static double magnitude;
 
 
     @Override
@@ -83,17 +86,25 @@ public class MainOpMode extends LinearOpMode {
                 screwMotor.setPower(0.0);
             }
 
-           // updateShooters();
+            angle = Math.atan2(lefty, leftx);
+            angleDegrees = Math.toDegrees(angle);
+            magnitude = Math.sqrt(lefty*lefty + leftx*leftx);
+            if (angleDegrees >= 0 && angleDegrees <= 90) {
+                leftMotors.setPower(magnitude * enginePower);
+                rightMotors.setPower((lefty - leftx) * enginePower);
+            } else if (angleDegrees >=0)
+            // updateShooters();
+
 
             //if the user is clearly trying to turn, not go forward precisely...
-            if (Math.abs(leftx) > Math.abs(lefty)) {
+            /*if (Math.abs(leftx) > Math.abs(lefty)) {
                 //it does not matter which direction they are turning, as the leftx value will be opposite in opposite directions
                 leftMotors.setPower(-leftx * enginePower);
                 rightMotors.setPower(leftx * enginePower);
             } else {
                 rightMotors.setPower(lefty * enginePower);
                 leftMotors.setPower(lefty * enginePower);
-            }
+            }*/
             telemetry.clear();
             telemetry.addData("R vertical: ", righty);
             telemetry.addData("L vertical: ",lefty);
