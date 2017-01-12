@@ -29,10 +29,6 @@ public class MainOpMode extends LinearOpMode {
     public static final double shooterIncr = 0.03;
     public static final double engineIncr = 0.09;
     public static boolean isSpinning = false;
-    public static double angle = 0.0;
-    public static double angleDegrees;
-    public static double magnitude;
-
 
     @Override
 
@@ -86,13 +82,16 @@ public class MainOpMode extends LinearOpMode {
                 screwMotor.setPower(0.0);
             }
 
-            angle = Math.atan2(lefty, leftx);
-            angleDegrees = Math.toDegrees(angle);
-            magnitude = Math.sqrt(lefty*lefty + leftx*leftx);
-            if (angleDegrees >= 0 && angleDegrees <= 90) {
+            double angle = Math.atan2(lefty, leftx);
+            double angleDegrees = Math.toDegrees(angle);
+            double magnitude = Math.sqrt(Math.pow(lefty, 2) + Math.pow(leftx, 2));
+            if ((angleDegrees >= 0 && angleDegrees <= 90) || (angleDegrees > 270 && angleDegrees <= 360)) {
                 leftMotors.setPower(magnitude * enginePower);
                 rightMotors.setPower((lefty - leftx) * enginePower);
-            } else if (angleDegrees >=0)
+            } else if ((angleDegrees > 90 && angleDegrees <= 180) || (angleDegrees > 180 && angleDegrees <= 270)) {
+                leftMotors.setPower((lefty + leftx) * enginePower);
+                rightMotors.setPower(magnitude * enginePower);
+            }
             // updateShooters();
 
 
