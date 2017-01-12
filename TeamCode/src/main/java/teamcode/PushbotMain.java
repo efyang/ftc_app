@@ -30,8 +30,15 @@ public class PushbotMain {
         leftFrontMotor = HM.dcMotor.get("L1");
         leftBackMotor = HM.dcMotor.get("L2");
         screwMotor = HM.dcMotor.get("Arc");
+        leftFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFrontMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightBackMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        screwMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         //rightShooterMotor = HM.dcMotor.get("SR");
         //leftShooterMotor = HM.dcMotor.get("SL");
+        //rightShooterMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //leftShooterMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
 

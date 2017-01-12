@@ -26,8 +26,9 @@ public class MainOpMode extends LinearOpMode {
     public static boolean prev_dpad_right = false;
     public static double shooterPower = 0.20;
     public static double enginePower = 0.8;
-    public static final double shooterIncr = 0.01;
-    public static final double engineIncr = 0.02;
+    public static final double shooterIncr = 0.03;
+    public static final double engineIncr = 0.09;
+    public static boolean isSpinning = false;
 
 
     @Override
@@ -35,7 +36,7 @@ public class MainOpMode extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap);
         // say hello
-        telemetry.addData("say", "Hey kid.");
+        telemetry.addData("say", "Initiated");
         telemetry.update();
         double leftx = 0.0;
         double righty = 0.0;
@@ -69,11 +70,23 @@ public class MainOpMode extends LinearOpMode {
             if (prev_dpad_right != gamepad1.dpad_right && gamepad1.dpad_right) {
                 enginePower = incr(enginePower, engineIncr, "+");
             }
+            if (prev_b != gamepad1.b && gamepad1.b) {
+                if (isSpinning) {
+                    isSpinning = false;
+                } else {
+                    isSpinning = true;
+                }
+            }
+            if (isSpinning) {
+                screwMotor.setPower(-.2);
+            } else {
+                screwMotor.setPower(0.0);
+            }
 
            // updateShooters();
 
             //if the user is clearly trying to turn, not go forward precisely...
-            if (Math.abs(leftx) > Math.abs(righty)) {
+            if (Math.abs(leftx) > Math.abs(lefty)) {
                 //it does not matter which direction they are turning, as the leftx value will be opposite in opposite directions
                 leftMotors.setPower(-leftx * enginePower);
                 rightMotors.setPower(leftx * enginePower);
@@ -82,10 +95,12 @@ public class MainOpMode extends LinearOpMode {
                 leftMotors.setPower(lefty * enginePower);
             }
             telemetry.clear();
-            telemetry.addData("say", "R vertical: " + gamepad1.right_stick_y);
-            telemetry.addData("say", "L vertical: " + gamepad1.left_stick_y);
-            telemetry.addData("say", "R horizontal: " + gamepad1.right_stick_x);
-            telemetry.addData("say", "L horizontal: " + gamepad1.left_stick_x);
+            telemetry.addData("R vertical: ", righty);
+            telemetry.addData("L vertical: ",lefty);
+            telemetry.addData("R horizontal: ", rightx);
+            telemetry.addData("L horizontal: ", leftx);
+            telemetry.addData("Engine power: ", enginePower);
+            telemetry.addData("Shooter power: ", shooterPower);
             telemetry.update();
             setValues(); //sets prev values to distinguish button presses tick-to-tick, preventing one press being
                          //detected as 100 presses
@@ -105,7 +120,7 @@ public class MainOpMode extends LinearOpMode {
             if (value + incr <= 1.0) {
                 return value + incr;
             }
-        } else if (sign.equals('-')) {
+        } else if (sign.equals("-")) {
             if (value - incr >= 0.0) {
                 return value - incr;
             }
