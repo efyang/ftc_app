@@ -40,6 +40,13 @@ public class PushbotMain {
         leftShooterMotor = HM.dcMotor.get("SL");
         rightShooterMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftShooterMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        //DualMotorGroup rightMotors = new DualMotorGroup(rightFrontMotor, rightBackMotor);
+        //DualMotorGroup leftMotors = new DualMotorGroup(leftFrontMotor, leftBackMotor);
+        //DualMotorGroup shooterMotors = new DualMotorGroup(leftShooterMotor, rightShooterMotor);
+        rightShooterMotor.setDirection(DcMotor.Direction.REVERSE);
+        //leftMotors.setDirection(DcMotor.Direction.REVERSE);
+        leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
+        leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
 
     }
 

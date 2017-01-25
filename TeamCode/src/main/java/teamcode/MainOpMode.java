@@ -77,13 +77,7 @@ public class MainOpMode extends LinearOpMode {
 
         }
 
-        //DualMotorGroup rightMotors = new DualMotorGroup(rightFrontMotor, rightBackMotor);
-        //DualMotorGroup leftMotors = new DualMotorGroup(leftFrontMotor, leftBackMotor);
-        //DualMotorGroup shooterMotors = new DualMotorGroup(leftShooterMotor, rightShooterMotor);
-        rightShooterMotor.setDirection(DcMotor.Direction.REVERSE);
-        //leftMotors.setDirection(DcMotor.Direction.REVERSE);
-        leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
-        leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
+
 
 
         telemetry.addData("say", "before opmode");

@@ -10,25 +10,22 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 @Autonomous(name="Auton", group="MainPushbot")
 public class Auton extends LinearOpMode {
     PushbotMain robot = new PushbotMain();
-    DcMotor rightFrontMotor = PushbotMain.rightFrontMotor;
-    DcMotor leftFrontMotor = PushbotMain.leftFrontMotor;
-    DcMotor rightBackMotor = PushbotMain.rightBackMotor;
-    DcMotor leftBackMotor = PushbotMain.leftBackMotor;
-    DcMotor rightShooterMotor = PushbotMain.rightShooterMotor;
-    DcMotor leftShooterMotor = PushbotMain.leftShooterMotor;
-    Servo flickServo = PushbotMain.flickServo;
+    public DcMotor rightFrontMotor = PushbotMain.rightFrontMotor;
+    public DcMotor leftFrontMotor = PushbotMain.leftFrontMotor;
+    public DcMotor rightBackMotor = PushbotMain.rightBackMotor;
+    public DcMotor leftBackMotor = PushbotMain.leftBackMotor;
+    public DcMotor rightShooterMotor = PushbotMain.rightShooterMotor;
+    public DcMotor leftShooterMotor = PushbotMain.leftShooterMotor;
+    public Servo flickServo = PushbotMain.flickServo;
 
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
-        DualMotorGroup rightMotors = new DualMotorGroup(rightFrontMotor, rightBackMotor);
-        DualMotorGroup leftMotors = new DualMotorGroup(leftFrontMotor, leftBackMotor);
-        DualMotorGroup shooterMotors = new DualMotorGroup(leftShooterMotor, rightShooterMotor);
-        rightShooterMotor.setDirection(DcMotor.Direction.REVERSE);
-        rightMotors.setDirection(DcMotor.Direction.REVERSE);
+
         waitForStart();
         while(opModeIsActive()) {
-            shooterMotors.setPower(.107);
+
+            setShooters(.11);
 
             try {
                 Thread.sleep(12000);
@@ -44,8 +41,8 @@ public class Auton extends LinearOpMode {
 
             }
 
-            leftMotors.setPower(0.5);
-            rightMotors.setPower(0.5);
+            setLeftMotors(0.5);
+            setRightMotors(0.5);
 
             try {
                 Thread.sleep(1300);
@@ -53,8 +50,21 @@ public class Auton extends LinearOpMode {
 
             }
 
-            leftMotors.setPower(0.0);
-            rightMotors.setPower(0.0);
+            setLeftMotors(0.0);
+            setRightMotors(0.0);
         }
+    }
+
+    public void setShooters(double d) {
+        rightShooterMotor.setPower(d);
+        leftShooterMotor.setPower(d);
+    }
+    public void setRightMotors(double d) {
+        rightFrontMotor.setPower(d);
+        rightBackMotor.setPower(d);
+    }
+    public void setLeftMotors(double d) {
+        leftFrontMotor.setPower(d);
+        leftBackMotor.setPower(d);
     }
 }
