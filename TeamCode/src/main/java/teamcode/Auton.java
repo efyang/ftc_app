@@ -21,7 +21,10 @@ public class Auton extends LinearOpMode {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
-
+        rightFrontMotor.setDirection(Direction.REVERSE);
+        rightBackMotor.setDirection(Direction.REVERSE);
+        leftFrontMotor.setDirection(Direction.FORWARD);
+        leftBackMotor.setDirection(Direction.FORWARD);
         waitForStart();
         while(opModeIsActive()) {
 
@@ -41,8 +44,8 @@ public class Auton extends LinearOpMode {
 
             }
 
-            setLeftMotors(0.5);
-            setRightMotors(0.5);
+            setLeftMotors(0.7);
+            setRightMotors(0.7);
 
             try {
                 Thread.sleep(1300);

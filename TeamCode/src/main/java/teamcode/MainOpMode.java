@@ -43,41 +43,9 @@ public class MainOpMode extends LinearOpMode {
     public static double lastServoMovement = System.currentTimeMillis();
 
     @Override
-
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException  {
 
         robot.init(hardwareMap);
-
-
-
-        // say hello
-        telemetry.addData("say", "Initiated");
-        telemetry.update();
-
-        try {
-            Thread.sleep(250);
-        } catch (InterruptedException e) {
-
-        }
-        telemetry.addData("say", "Initiated again");
-        telemetry.update();
-
-        try {
-            Thread.sleep(250);
-        } catch (InterruptedException e) {
-
-        }
-
-        telemetry.addData("say", "Initiated a third time yo.");
-        telemetry.update();
-
-        try {
-            Thread.sleep(250);
-        } catch (InterruptedException e) {
-
-        }
-
-
 
 
         telemetry.addData("say", "before opmode");
@@ -90,33 +58,48 @@ public class MainOpMode extends LinearOpMode {
             lefty = (double) gamepad1.left_stick_y;
             righty = (double) gamepad1.right_stick_y;
             rightx = (double) gamepad1.right_stick_x;
-            if (prev_dpad_up != gamepad1.dpad_up && gamepad1.dpad_up) {
+            if (  gamepad1.dpad_up && prev_dpad_up != gamepad1.dpad_up
+            ) {
                 shooterPower = incr(shooterPower, shooterIncr, "+");
             }
-            if (prev_dpad_down != gamepad1.dpad_down && gamepad1.dpad_down) {
+            if (gamepad1.dpad_down && prev_dpad_down != gamepad1.dpad_down
+             ) {
                 shooterPower = incr(shooterPower, shooterIncr, "-");
             }
-            if (prev_dpad_left != gamepad1.dpad_left && gamepad1.dpad_left) {
+            if ( gamepad1.dpad_left && prev_dpad_left != gamepad1.dpad_left
+                    ) {
                 enginePower = incr(enginePower, engineIncr, "-");
             }
-            if (prev_dpad_right != gamepad1.dpad_right && gamepad1.dpad_right) {
+            if ( gamepad1.dpad_right
+                    //&& prev_dpad_right != gamepad1.dpad_right
+                    ) {
                 enginePower = incr(enginePower, engineIncr, "+");
             }
 
 
-            if (prev_b != gamepad1.b && gamepad1.b) {
+            if (gamepad1.b
+                    //&& prev_b != gamepad1.b
+                    ) {
                 if (isSpinning) {
                     isSpinning = false;
                 } else {
                     isSpinning = true;
                 }
             }
-
+//hehe xd boiiiii
             if (gamepad1.a) {
                 lastServoMovement = System.currentTimeMillis();
                 flickServo.setPosition(0.5);
-            } else {
+            } else if (gamepad1.x){
                 lastServoMovement = System.currentTimeMillis();
+                flickServo.setPosition(.6);
+                Thread.sleep(100);
+                flickServo.setPosition(.7);
+                Thread.sleep(100);
+                flickServo.setPosition(.8);
+                Thread.sleep(100);
+                flickServo.setPosition(.9);
+                Thread.sleep(100);
                 flickServo.setPosition(1.0);
             }
 
