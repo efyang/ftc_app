@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
+
 
 /**
  * Created by efyang on 12/16/16.
@@ -13,13 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 @TeleOp(name="Main Teleop", group="Pushbot")
 public class MainOpMode extends LinearOpMode {
     PushbotMain robot = new PushbotMain();
-    DcMotor rightFrontMotor = PushbotMain.rightFrontMotor;
-    DcMotor leftFrontMotor = PushbotMain.leftFrontMotor;
-    DcMotor rightBackMotor = PushbotMain.rightBackMotor;
-    DcMotor leftBackMotor = PushbotMain.leftBackMotor;
-    DcMotor rightShooterMotor = PushbotMain.rightShooterMotor;
-    DcMotor leftShooterMotor = PushbotMain.leftShooterMotor;
-    Servo flickServo = PushbotMain.flickServo;
+
     public static boolean prev_a = false;
     public static boolean prev_b = false;
     public static boolean prev_dpad_down = false;
@@ -31,22 +25,23 @@ public class MainOpMode extends LinearOpMode {
     public static final double shooterIncr = 0.02;
     public static final double engineIncr = 0.08;
     public static boolean isSpinning = false;
-    public static double angleDegrees;
-    public static double angle;
-    public static double magnitude;
-    public static boolean flickIsUp = false;
     public static double turnCoefficient = 1.0;
     public static double leftx = 0.0;
     public static double righty = 0.0;
     public static double rightx = 0.0;
     public static double lefty = 0.0;
-    public static double lastServoMovement = System.currentTimeMillis();
 
     @Override
     public void runOpMode() throws InterruptedException  {
 
         robot.init(hardwareMap);
-
+        DcMotor rightFrontMotor = PushbotMain.rightFrontMotor;
+        DcMotor leftFrontMotor = PushbotMain.leftFrontMotor;
+        DcMotor rightBackMotor = PushbotMain.rightBackMotor;
+        DcMotor leftBackMotor = PushbotMain.leftBackMotor;
+        DcMotor rightShooterMotor = PushbotMain.rightShooterMotor;
+        DcMotor leftShooterMotor = PushbotMain.leftShooterMotor;
+        Servo flickServo = PushbotMain.flickServo;
 
         telemetry.addData("say", "before opmode");
         telemetry.update();
@@ -70,8 +65,7 @@ public class MainOpMode extends LinearOpMode {
                     ) {
                 enginePower = incr(enginePower, engineIncr, "-");
             }
-            if ( gamepad1.dpad_right
-                    //&& prev_dpad_right != gamepad1.dpad_right
+            if ( gamepad1.dpad_right && prev_dpad_right != gamepad1.dpad_right
                     ) {
                 enginePower = incr(enginePower, engineIncr, "+");
             }
@@ -86,12 +80,10 @@ public class MainOpMode extends LinearOpMode {
                     isSpinning = true;
                 }
             }
-//hehe xd boiiiii
+
             if (gamepad1.a) {
-                lastServoMovement = System.currentTimeMillis();
                 flickServo.setPosition(0.5);
             } else if (gamepad1.x){
-                lastServoMovement = System.currentTimeMillis();
                 flickServo.setPosition(.6);
                 Thread.sleep(100);
                 flickServo.setPosition(.7);
@@ -180,16 +172,4 @@ public class MainOpMode extends LinearOpMode {
         return value;
     }
 
-    // startup shooter motors - they should remain spinning while the robot is running
-
-
-    // pivot by `degrees` degrees
-    private void pivot(float degrees) {
-
-    }
-
-    // move forward/backword by `meters` meters
-    private void move(double meters) {
-
-    }
 }

@@ -5,8 +5,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+
+
+
 
 
 public class PushbotMain {
@@ -23,7 +25,6 @@ public class PushbotMain {
 
 
     //runs on press of the "init" button. Maps engines from the robot to variables,
-    // and creates a tick before the first with default values
     public void init(HardwareMap HwMap) {
         HardwareMap HM = HwMap;
         rightFrontMotor = HM.dcMotor.get("R1");
@@ -40,11 +41,7 @@ public class PushbotMain {
         leftShooterMotor = HM.dcMotor.get("SL");
         rightShooterMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftShooterMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        //DualMotorGroup rightMotors = new DualMotorGroup(rightFrontMotor, rightBackMotor);
-        //DualMotorGroup leftMotors = new DualMotorGroup(leftFrontMotor, leftBackMotor);
-        //DualMotorGroup shooterMotors = new DualMotorGroup(leftShooterMotor, rightShooterMotor);
         rightShooterMotor.setDirection(DcMotor.Direction.REVERSE);
-        //leftMotors.setDirection(DcMotor.Direction.REVERSE);
         leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
         leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
 
