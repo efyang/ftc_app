@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name="Main Teleop", group="Pushbot")
 public class MainOpMode extends LinearOpMode {
     PushbotMain robot = new PushbotMain();
-
+    public static boolean prev_x = false;
     public static boolean prev_a = false;
     public static boolean prev_b = false;
     public static boolean prev_dpad_down = false;
@@ -30,7 +30,8 @@ public class MainOpMode extends LinearOpMode {
     public static double righty = 0.0;
     public static double rightx = 0.0;
     public static double lefty = 0.0;
-
+    public static boolean servoUp = false;
+    public static boolean precision = false;
     @Override
     public void runOpMode() throws InterruptedException  {
 
@@ -71,9 +72,7 @@ public class MainOpMode extends LinearOpMode {
             }
 
 
-            if (gamepad1.b
-                    //&& prev_b != gamepad1.b
-                    ) {
+            if (gamepad1.b) {
                 if (isSpinning) {
                     isSpinning = false;
                 } else {
@@ -82,18 +81,21 @@ public class MainOpMode extends LinearOpMode {
             }
 
             if (gamepad1.a) {
-                flickServo.setPosition(0.5);
-            } else if (gamepad1.x){
-                flickServo.setPosition(.6);
-                Thread.sleep(100);
-                flickServo.setPosition(.7);
-                Thread.sleep(100);
-                flickServo.setPosition(.8);
-                Thread.sleep(100);
-                flickServo.setPosition(.9);
-                Thread.sleep(100);
-                flickServo.setPosition(1.0);
+                flickServo.setPosition(.3);
             }
+            if (gamepad1.x) {
+                flickServo.setPosition(.7);
+            }
+            if (gamepad1.y) {
+                if (precision) {
+                    precision = false;
+                } else {
+                    precision = true;
+                }
+            }
+
+
+
 
 
 
@@ -125,17 +127,33 @@ public class MainOpMode extends LinearOpMode {
 
 
             //if the user is clearly trying to turn, not go forward precisely...
-            if (Math.abs(leftx) > Math.abs(lefty)) {
-                //it does not matter which direction they are turning, as the leftx value will be opposite in opposite directions
-                leftFrontMotor.setPower(-leftx * enginePower * turnCoefficient);
-                rightFrontMotor.setPower(leftx * enginePower * turnCoefficient);
-                leftBackMotor.setPower(-leftx * enginePower * turnCoefficient);
-                rightBackMotor.setPower(leftx * enginePower * turnCoefficient);
+
+            if (precision) {
+                if (Math.abs(leftx) > Math.abs(lefty)) {
+                    //it does not matter which direction they are turning, as the leftx value will be opposite in opposite directions
+                    leftFrontMotor.setPower(-leftx * enginePower * turnCoefficient /2);
+                    rightFrontMotor.setPower(leftx * enginePower * turnCoefficient /2);
+                    leftBackMotor.setPower(-leftx * enginePower * turnCoefficient /2);
+                    rightBackMotor.setPower(leftx * enginePower * turnCoefficient /2);
+                } else {
+                    rightFrontMotor.setPower(lefty * enginePower /2);
+                    leftFrontMotor.setPower(lefty * enginePower /2);
+                    rightBackMotor.setPower(lefty * enginePower /2);
+                    leftBackMotor.setPower(lefty * enginePower /2);
+                }
             } else {
-                rightFrontMotor.setPower(lefty * enginePower);
-                leftFrontMotor.setPower(lefty * enginePower);
-                rightBackMotor.setPower(lefty * enginePower);
-                leftBackMotor.setPower(lefty * enginePower);
+                if (Math.abs(leftx) > Math.abs(lefty)) {
+                    //it does not matter which direction they are turning, as the leftx value will be opposite in opposite directions
+                    leftFrontMotor.setPower(-leftx * enginePower * turnCoefficient);
+                    rightFrontMotor.setPower(leftx * enginePower * turnCoefficient);
+                    leftBackMotor.setPower(-leftx * enginePower * turnCoefficient);
+                    rightBackMotor.setPower(leftx * enginePower * turnCoefficient);
+                } else {
+                    rightFrontMotor.setPower(lefty * enginePower);
+                    leftFrontMotor.setPower(lefty * enginePower);
+                    rightBackMotor.setPower(lefty * enginePower);
+                    leftBackMotor.setPower(lefty * enginePower);
+                }
             }
 
             telemetry.addData("R vertical", righty);
@@ -157,6 +175,7 @@ public class MainOpMode extends LinearOpMode {
         prev_dpad_left = gamepad1.dpad_left;
         prev_dpad_right = gamepad1.dpad_right;
         prev_dpad_up = gamepad1.dpad_up;
+        prev_x = gamepad1.x;
     }
     //a function that returns a modified value, checking if it falls within logical boundaries first
     public double incr(double value, double incr, String sign) {

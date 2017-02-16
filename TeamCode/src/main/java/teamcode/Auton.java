@@ -30,8 +30,8 @@ public class Auton extends LinearOpMode {
         leftBackMotor.setDirection(Direction.FORWARD);
         while(opModeIsActive()) {
 
-            rightShooterMotor.setPower(.137);
-            leftShooterMotor.setPower(.137);
+            rightShooterMotor.setPower(.15);
+            leftShooterMotor.setPower(.15);
 
             try {
                 Thread.sleep(12000);
@@ -39,7 +39,7 @@ public class Auton extends LinearOpMode {
 
             }
 
-            flickServo.setPosition(0.5);
+            flickServo.setPosition(0.3);
 
             try {
                 Thread.sleep(1000);
