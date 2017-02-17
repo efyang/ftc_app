@@ -2,14 +2,13 @@ package teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction;
 
 @Autonomous(name="Auton", group="MainPushbot")
 public class Auton extends LinearOpMode {
-    PushbotMain robot = new PushbotMain();
+    MainRobot robot = new MainRobot();
 
 
     @Override
@@ -17,13 +16,13 @@ public class Auton extends LinearOpMode {
         robot.init(hardwareMap);
 
         waitForStart();
-        DcMotor rightFrontMotor = PushbotMain.rightFrontMotor;
-        DcMotor leftFrontMotor = PushbotMain.leftFrontMotor;
-        DcMotor rightBackMotor = PushbotMain.rightBackMotor;
-        DcMotor leftBackMotor = PushbotMain.leftBackMotor;
-        DcMotor rightShooterMotor = PushbotMain.rightShooterMotor;
-        DcMotor leftShooterMotor = PushbotMain.leftShooterMotor;
-        Servo flickServo = PushbotMain.flickServo;
+        DcMotor rightFrontMotor = MainRobot.rightFrontMotor;
+        DcMotor leftFrontMotor = MainRobot.leftFrontMotor;
+        DcMotor rightBackMotor = MainRobot.rightBackMotor;
+        DcMotor leftBackMotor = MainRobot.leftBackMotor;
+        DcMotor rightShooterMotor = MainRobot.rightShooterMotor;
+        DcMotor leftShooterMotor = MainRobot.leftShooterMotor;
+        Servo flickServo = MainRobot.flickServo;
         rightFrontMotor.setDirection(Direction.REVERSE);
         rightBackMotor.setDirection(Direction.REVERSE);
         leftFrontMotor.setDirection(Direction.FORWARD);
@@ -39,7 +38,7 @@ public class Auton extends LinearOpMode {
 
             }
 
-            flickServo.setPosition(0.3);
+            flickServo.setPosition(0.2);
 
             try {
                 Thread.sleep(1000);

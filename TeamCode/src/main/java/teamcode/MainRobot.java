@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 
 
-public class PushbotMain {
+public class MainRobot {
     //define all variables used
 
 

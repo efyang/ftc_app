@@ -10,50 +10,63 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Created by efyang on 12/16/16.
  */
 
-@TeleOp(name="Main Teleop", group="Pushbot")
+@TeleOp(name="Main Teleop", group="Robot")
 public class MainOpMode extends LinearOpMode {
-    PushbotMain robot = new PushbotMain();
+
+    //creates an instance variable fo the robot
+    MainRobot robot = new MainRobot();
+
+    //initiate all "last tick" variable for controller
     public static boolean prev_x = false;
+    public static boolean prev_y = false;
     public static boolean prev_a = false;
     public static boolean prev_b = false;
     public static boolean prev_dpad_down = false;
     public static boolean prev_dpad_up = false;
     public static boolean prev_dpad_left = false;
     public static boolean prev_dpad_right = false;
+    public static boolean prev_lbumper = false;
+    public static boolean prev_rbumper = false;
+    public static float prev_ltrigger = (float) 0;
+    public static float prev_rtrigger = (float) 0;
+
     public static double shooterPower = 0.13;
     public static double enginePower = 0.9;
     public static final double shooterIncr = 0.02;
     public static final double engineIncr = 0.08;
     public static boolean isSpinning = false;
-    public static double turnCoefficient = 1.0;
+    public static double turnCoefficient = 2.0;
     public static double leftx = 0.0;
     public static double righty = 0.0;
     public static double rightx = 0.0;
     public static double lefty = 0.0;
-    public static boolean servoUp = false;
-    public static boolean precision = false;
+
+    public static double precision = 1.0;
+
+    public static double servoUpPosition = .23;
+    public static double servoDownPosition = .5;
+    public static double servoUpOffset = .03;
+    public static double servoDownOffset = .03;
     @Override
     public void runOpMode() throws InterruptedException  {
 
         robot.init(hardwareMap);
-        DcMotor rightFrontMotor = PushbotMain.rightFrontMotor;
-        DcMotor leftFrontMotor = PushbotMain.leftFrontMotor;
-        DcMotor rightBackMotor = PushbotMain.rightBackMotor;
-        DcMotor leftBackMotor = PushbotMain.leftBackMotor;
-        DcMotor rightShooterMotor = PushbotMain.rightShooterMotor;
-        DcMotor leftShooterMotor = PushbotMain.leftShooterMotor;
-        Servo flickServo = PushbotMain.flickServo;
+        DcMotor rightFrontMotor = MainRobot.rightFrontMotor;
+        DcMotor leftFrontMotor = MainRobot.leftFrontMotor;
+        DcMotor rightBackMotor = MainRobot.rightBackMotor;
+        DcMotor leftBackMotor = MainRobot.leftBackMotor;
+        DcMotor rightShooterMotor = MainRobot.rightShooterMotor;
+        DcMotor leftShooterMotor = MainRobot.leftShooterMotor;
+        Servo flickServo = MainRobot.flickServo;
 
         telemetry.addData("say", "before opmode");
         telemetry.update();
         waitForStart();
         while (opModeIsActive()) {
+
             telemetry.clear();
 
-            leftx = (double) gamepad1.left_stick_x;
-            lefty = (double) gamepad1.left_stick_y;
-            righty = (double) gamepad1.right_stick_y;
-            rightx = (double) gamepad1.right_stick_x;
+            //increment and decrement the shooting motors' powers
             if (  gamepad1.dpad_up && prev_dpad_up != gamepad1.dpad_up
             ) {
                 shooterPower = incr(shooterPower, shooterIncr, "+");
@@ -62,6 +75,8 @@ public class MainOpMode extends LinearOpMode {
              ) {
                 shooterPower = incr(shooterPower, shooterIncr, "-");
             }
+
+            //increment and decrement the driving motors' powers
             if ( gamepad1.dpad_left && prev_dpad_left != gamepad1.dpad_left
                     ) {
                 enginePower = incr(enginePower, engineIncr, "-");
@@ -71,8 +86,25 @@ public class MainOpMode extends LinearOpMode {
                 enginePower = incr(enginePower, engineIncr, "+");
             }
 
+            //adjust the up offset from default of the servo
+            if (gamepad1.left_bumper && prev_lbumper != gamepad1.left_bumper) {
+                servoUpOffset = servoUpOffset - .01;
+            }
+            if (gamepad1.right_bumper && prev_rbumper != gamepad1.right_bumper) {
+                servoUpOffset = servoUpOffset + .01;
+            }
 
-            if (gamepad1.b) {
+
+            //adjust the down offset from default of the servo
+            if (gamepad1.left_trigger != (float) 0 && prev_ltrigger != gamepad1.left_trigger) {
+                servoDownOffset = servoDownOffset - .01;
+            }
+            if (gamepad1.right_trigger != (float) 0 && prev_rtrigger != gamepad1.right_trigger) {
+                servoDownOffset = servoDownOffset + .01;
+            }
+
+            //toggle the shooters
+            if (gamepad1.b && prev_b != gamepad1.b) {
                 if (isSpinning) {
                     isSpinning = false;
                 } else {
@@ -80,17 +112,22 @@ public class MainOpMode extends LinearOpMode {
                 }
             }
 
+            //lift servo
             if (gamepad1.a) {
-                flickServo.setPosition(.3);
+                flickServo.setPosition(servoUpPosition - servoUpOffset);
             }
+
+            //lower servo
             if (gamepad1.x) {
-                flickServo.setPosition(.7);
+                flickServo.setPosition(servoDownPosition + servoDownOffset);
             }
-            if (gamepad1.y) {
-                if (precision) {
-                    precision = false;
+
+            //toggle precise driving mode
+            if (gamepad1.y && gamepad1.y != prev_y) {
+                if (precision == 1.0) {
+                    precision = 0.5;
                 } else {
-                    precision = true;
+                    precision = 1.0;
                 }
             }
 
@@ -98,7 +135,7 @@ public class MainOpMode extends LinearOpMode {
 
 
 
-
+            //set shooters to correct speed
             if (isSpinning) {
                 rightShooterMotor.setPower(shooterPower);
                 leftShooterMotor.setPower(shooterPower);
@@ -107,55 +144,24 @@ public class MainOpMode extends LinearOpMode {
                 leftShooterMotor.setPower(0.0);
             }
 
-           /* angle = Math.atan2(lefty, leftx);
-            angleDegrees = (Math.toDegrees(angle) + 540) % 360;
-            magnitude = Math.sqrt(Math.pow(lefty, 2) + Math.pow(leftx, 2));
-            telemetry.addData("Angle", angle);
-            telemetry.addData("Angle degrees", angleDegrees);
-            telemetry.addData("Magnitude", magnitude);
-            //telemetry.addData("Servo", flickServo.getPosition());
-            telemetry.update();
-            double sin = Math.sin(angle);
-            if (angleDegrees >= 0 && angleDegrees <= 180) {
-                leftMotors.setPower(magnitude * enginePower * sin);
-                rightMotors.setPower(magnitude * enginePower * (2 - (1/sin)));
+
+
+            //if the x axis is greater than y axis values on joystick (indicates turning)
+            if (Math.abs(leftx) > Math.abs(lefty)) {
+                //it does not matter which direction they are turning, as the leftx value will be opposite in opposite directions
+                leftFrontMotor.setPower(-leftx * enginePower * turnCoefficient * precision /2);
+                rightFrontMotor.setPower(leftx * enginePower * turnCoefficient * precision /2);
+                leftBackMotor.setPower(-leftx * enginePower * turnCoefficient * precision /2);
+                rightBackMotor.setPower(leftx * enginePower * turnCoefficient * precision /2);
             } else {
-                leftMotors.setPower(-magnitude * enginePower * sin);
-                rightMotors.setPower(-magnitude * enginePower * (2 - (1/sin)));
-            }*/
-
-
-
-            //if the user is clearly trying to turn, not go forward precisely...
-
-            if (precision) {
-                if (Math.abs(leftx) > Math.abs(lefty)) {
-                    //it does not matter which direction they are turning, as the leftx value will be opposite in opposite directions
-                    leftFrontMotor.setPower(-leftx * enginePower * turnCoefficient /2);
-                    rightFrontMotor.setPower(leftx * enginePower * turnCoefficient /2);
-                    leftBackMotor.setPower(-leftx * enginePower * turnCoefficient /2);
-                    rightBackMotor.setPower(leftx * enginePower * turnCoefficient /2);
-                } else {
-                    rightFrontMotor.setPower(lefty * enginePower /2);
-                    leftFrontMotor.setPower(lefty * enginePower /2);
-                    rightBackMotor.setPower(lefty * enginePower /2);
-                    leftBackMotor.setPower(lefty * enginePower /2);
-                }
-            } else {
-                if (Math.abs(leftx) > Math.abs(lefty)) {
-                    //it does not matter which direction they are turning, as the leftx value will be opposite in opposite directions
-                    leftFrontMotor.setPower(-leftx * enginePower * turnCoefficient);
-                    rightFrontMotor.setPower(leftx * enginePower * turnCoefficient);
-                    leftBackMotor.setPower(-leftx * enginePower * turnCoefficient);
-                    rightBackMotor.setPower(leftx * enginePower * turnCoefficient);
-                } else {
-                    rightFrontMotor.setPower(lefty * enginePower);
-                    leftFrontMotor.setPower(lefty * enginePower);
-                    rightBackMotor.setPower(lefty * enginePower);
-                    leftBackMotor.setPower(lefty * enginePower);
-                }
+                //otherwise go forward
+                rightFrontMotor.setPower(lefty * enginePower * precision /2);
+                leftFrontMotor.setPower(lefty * enginePower * precision /2);
+                rightBackMotor.setPower(lefty * enginePower * precision /2);
+                leftBackMotor.setPower(lefty * enginePower * precision /2);
             }
 
+            //update telemetry
             telemetry.addData("R vertical", righty);
             telemetry.addData("L vertical",lefty);
             telemetry.addData("R horizontal", rightx);
@@ -163,9 +169,12 @@ public class MainOpMode extends LinearOpMode {
             telemetry.addData("Engine power", enginePower);
             telemetry.addData("Shooter power", shooterPower);
             telemetry.addData("Servo position", flickServo.getPosition());
+            telemetry.addData("Servo up offset", servoUpOffset);
+            telemetry.addData("Servo down offset", servoDownOffset);
             telemetry.update();
-            setValues(); //sets prev values to distinguish button presses tick-to-tick, preventing one press being
-                         //detected as 100 presses
+
+            //sets prev values to distinguish button presses tick-to-tick
+            setValues();
         }
     }
     public void setValues() {
@@ -176,7 +185,14 @@ public class MainOpMode extends LinearOpMode {
         prev_dpad_right = gamepad1.dpad_right;
         prev_dpad_up = gamepad1.dpad_up;
         prev_x = gamepad1.x;
+        prev_lbumper = gamepad1.left_bumper;
+        prev_rbumper = gamepad1.right_bumper;
+        prev_ltrigger = gamepad1.left_trigger;
+        prev_rtrigger = gamepad1.right_trigger;
+        prev_y = gamepad1.y;
     }
+
+
     //a function that returns a modified value, checking if it falls within logical boundaries first
     public double incr(double value, double incr, String sign) {
         if (sign.equals("+")) {
