@@ -149,16 +149,16 @@ public class MainOpMode extends LinearOpMode {
             //if the x axis is greater than y axis values on joystick (indicates turning)
             if (Math.abs(leftx) > Math.abs(lefty)) {
                 //it does not matter which direction they are turning, as the leftx value will be opposite in opposite directions
-                leftFrontMotor.setPower(-leftx * enginePower * turnCoefficient * precision /2);
-                rightFrontMotor.setPower(leftx * enginePower * turnCoefficient * precision /2);
-                leftBackMotor.setPower(-leftx * enginePower * turnCoefficient * precision /2);
-                rightBackMotor.setPower(leftx * enginePower * turnCoefficient * precision /2);
+                leftFrontMotor.setPower(-leftx * enginePower * turnCoefficient * precision);
+                rightFrontMotor.setPower(leftx * enginePower * turnCoefficient * precision);
+                leftBackMotor.setPower(-leftx * enginePower * turnCoefficient * precision);
+                rightBackMotor.setPower(leftx * enginePower * turnCoefficient * precision);
             } else {
                 //otherwise go forward
-                rightFrontMotor.setPower(lefty * enginePower * precision /2);
-                leftFrontMotor.setPower(lefty * enginePower * precision /2);
-                rightBackMotor.setPower(lefty * enginePower * precision /2);
-                leftBackMotor.setPower(lefty * enginePower * precision /2);
+                rightFrontMotor.setPower(lefty * enginePower * precision);
+                leftFrontMotor.setPower(lefty * enginePower * precision);
+                rightBackMotor.setPower(lefty * enginePower * precision);
+                leftBackMotor.setPower(lefty * enginePower * precision);
             }
 
             //update telemetry
